@@ -1,0 +1,193 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+
+        <ui:composition template="/indexprincipal.xhtml">     
+            <ui:define name="windowTitle">
+                #{msgs.planetariumTitle}
+            </ui:define> 
+
+            <ui:define name="content">
+
+
+                <h:form id="listaMantenimientos">
+
+
+                    <h:graphicImage name="/images/franja.PNG" width="1200" height="80"  alt="listaMantenimientos" />
+
+                    <center>
+                        <p:panel header="LISTA DE MANTENIMIENTOS REGISTRADOS"/>
+                    </center>
+                    <h:panelGrid style="border: 0px;" id="Mantenimiento" >
+
+                        <p:dataTable id="listarMantenimientos" value="#{mantenimientocore.listarmant}"
+                                     var="listarMantenimientos" widgetVar="listarMantenimientos"
+                                     rows="5"
+                                     paginator="true"
+                                     paginatorPosition="bottom"
+                                     scrollable="true"
+                                     scrollRows="5"
+                                     scrollHeight="150">
+
+                            <p:column id="coId" headerText="Id" filterBy="#{listarMantenimientos.idMantenimiento}">
+                                <p:outputLabel value="#{listarMantenimientos.idMantenimiento}">  </p:outputLabel>
+                            </p:column>
+
+                            <p:column id="cotipomant" headerText="Mantenimento" filterBy="#{listarMantenimientos.tipomant}">
+                                <p:outputLabel value="#{listarMantenimientos.tipomant}">  </p:outputLabel>
+                            </p:column>
+                            <p:column id="coFechamant" headerText="Fecha" filterBy="#{listarMantenimientos.fechamant}">
+                                <p:outputLabel value="#{listarMantenimientos.fechamant}">  </p:outputLabel>
+                            </p:column>
+                            <p:column id="coHoramant" headerText="Hora" filterBy="#{listarMantenimientos.horamant}">
+                                <p:outputLabel value="#{listarMantenimientos.horamant}">  </p:outputLabel>
+                            </p:column>       
+
+                            <p:column id="coDescripcionmant" headerText="Descripcion" filterBy="#{listarMantenimientos.descripcionmant}">
+                                <p:outputLabel value="#{listarMantenimientos.descripcionmant}">  </p:outputLabel>
+                            </p:column>
+                            <p:column id="coObservacionesmant" headerText="Observaciones" filterBy="#{listarMantenimientos.observacionesmant}">
+                                <p:outputLabel value="#{listarMantenimientos.observacionesmant}">  </p:outputLabel>
+                            </p:column>
+                            <p:column id="coRecomendacionesmant" headerText="Recomendaciones" filterBy="#{listarMantenimientos.recomendacionesmant}">
+                                <p:outputLabel value="#{listarMantenimientos.recomendacionesmant}">  </p:outputLabel>
+                            </p:column>
+
+                            <p:column headerText="Item" filterBy="#{listarMantenimientos.fkItem.item}">
+                                <h:outputText value="#{listarMantenimientos.fkItem.item} 
+                                              #{listarMantenimientos.fkItem.noserieitem}" />
+                            </p:column>
+
+                            <p:column headerText="Realizado por:" filterBy="#{listarMantenimientos.fkUsuario.apellidousuario}">
+                                <h:outputText value="#{listarMantenimientos.fkUsuario.nombreusuario} 
+                                              #{listarMantenimientos.fkUsuario.apellidousuario}" />
+                            </p:column>
+
+                            <p:column id="coEditDpto" headerText="Editar" width="30"  rendered="#{usercore.preguntaAdministrador or usercore.preguntaNormal}">
+                                <p:commandButton icon="ui-icon-pencil" title="Editar Mantenimiento" update=":frmDialogEditar" actionListener="#{mantenimientocore.editarModalPanel(listarMantenimientos)}" oncomplete="PF('editarModal').show();">
+                                    <f:setPropertyActionListener target="#{mantenimientocore.editarObjeto}" value="#{listarMantenimientos}"></f:setPropertyActionListener>
+                                </p:commandButton>
+                            </p:column>
+
+                            <p:column id="coElimDpto" headerText="Eliminar" width="35" rendered="#{usercore.preguntaAdministrador}">
+                                <p:commandButton icon="ui-icon-trash" title="Eliminar Mantenimiento" update=":frmDialogEliminar" actionListener="#{mantenimientocore.editarModalPanel(listarMantenimientos)}" oncomplete="PF('eliminarModal').show();">
+                                    <f:setPropertyActionListener target="#{mantenimientocore.editarObjeto}" value="#{listarMantenimientos}"></f:setPropertyActionListener>
+                                </p:commandButton>
+                            </p:column>
+
+                            <f:facet name="header">
+                                <h:commandLink>
+                                    <h:graphicImage url="/resources/images/pdf.png" width="24"/>
+                                    <p:dataExporter type="pdf" target="listarMantenimientos" fileName="ReporteMantenimientos"/>
+                                </h:commandLink>  
+                            </f:facet>
+
+                            <f:facet name="header">
+                                <h:commandLink>
+                                    <h:graphicImage url="/resources/images/exel.png" width="24"/>
+                                    <p:dataExporter type="xls" target="listarMantenimientos" fileName="ReporteMantenimientos"/>
+                                </h:commandLink>  
+                            </f:facet>
+                        </p:dataTable>
+                    </h:panelGrid>
+
+                </h:form>
+                
+                
+                 <!-- DIALOG PARA EDITAR -->    
+                <p:dialog header="Editar" id="editarModal" widgetVar="editarModal"  resizable="false" draggable="false" position="center" width="600" height="500" appendTo="@(body)" style="background-color: darkturquoise" >
+                    <h:form id="frmDialogEditar">
+                        <center>
+                            <p:panel id="pnlEditDepa" header="EDITAR EL MANTENIMIENTO">
+                                <p:separator style="border-color: orange"></p:separator>
+                                <h:panelGrid columns="2">
+
+                                <p:outputLabel id="oltipomant" value="Mantenimiento"> </p:outputLabel>
+                                <p:selectOneMenu id="tipomant" required="true" value="#{mantenimientocore.editarObjeto.tipomant}" style="width:140px">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                    <f:selectItem itemLabel="Preventivo" itemValue="Preventivo" />
+                                    <f:selectItem itemLabel="Correctivo" itemValue="Correctivo" />
+                                 </p:selectOneMenu>       
+
+                                <p:outputLabel id="olFechamant" value="Fecha"> </p:outputLabel>
+                                <p:inputText id="fechamant" required="true" value="#{mantenimientocore.editarObjeto.fechamant}"></p:inputText>
+
+                                <p:outputLabel id="olHoramant" value="Hora"> </p:outputLabel>
+                                <p:selectOneMenu id="Horamant" required="true" value="#{mantenimientocore.editarObjeto.horamant}" style="width:140px">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                    <f:selectItem itemLabel="08:00" itemValue="08:00" />
+                                    <f:selectItem itemLabel="09:00" itemValue="09:00" />
+                                    <f:selectItem itemLabel="10:00" itemValue="10:00" />
+                                    <f:selectItem itemLabel="11:00" itemValue="11:00" />
+                                    <f:selectItem itemLabel="12:00" itemValue="12:00" />
+                                    <f:selectItem itemLabel="13:00" itemValue="13:00" />
+                                    <f:selectItem itemLabel="14:00" itemValue="14:00" />
+                                    <f:selectItem itemLabel="15:00" itemValue="15:00" />
+                                    <f:selectItem itemLabel="16:00" itemValue="16:00" />
+                                    <f:selectItem itemLabel="17:00" itemValue="17:00" />
+                                </p:selectOneMenu>
+                  
+                                <p:outputLabel id="olDescripcionmant" value="Descripcion"> </p:outputLabel>
+                                 <p:inputTextarea id="descripcionmant" required="true" value="#{mantenimientocore.editarObjeto.descripcionmant}" cols="20" rows="6" placeholder="Ingrese las tareas realizadas en el equipo"/>
+                                    
+                                 <p:outputLabel id="olObservacionesmant" value="Observaciones"> </p:outputLabel>
+                                 <p:inputTextarea id="Observacionesmant" required="true" value="#{mantenimientocore.editarObjeto.observacionesmant}" cols="20" rows="6" placeholder="Ingrese las observaciones encontradas en el equipo"/>
+                                    
+                                 <p:outputLabel id="olRecomendacionesmant" value="Recomendaciones"> </p:outputLabel>
+                                 <p:inputTextarea id="recomendacionesmant" required="true" value="#{mantenimientocore.editarObjeto.recomendacionesmant}" cols="20" rows="6" placeholder="Ingrese las recomendaciones para el equipo"/>
+                                    
+                                <p:outputLabel id="olitem1" value="Item"> </p:outputLabel>
+                                     <p:selectOneMenu id="console3" value="#{mantenimientocore.idItem}" 
+						panelStyle="width:250px">
+							<f:selectItem itemLabel="Seleccionar" itemValue="" />
+                                                        <f:selectItems value="#{mantenimientocore.listaitm}" var="itm1"
+                                                                       itemLabel="#{itm1.item}  #{itm1.noserieitem}" 
+                                                                       itemValue="#{itm1.idItem}"> </f:selectItems>
+						</p:selectOneMenu> 
+                                 
+                                 <p:outputLabel id="olusuario1" value="Usuario"> </p:outputLabel>
+                                      <p:selectOneMenu id="console4" value="#{mantenimientocore.idUsuario}" 
+						panelStyle="width:250px">
+							<f:selectItem itemLabel="Seleccionar" itemValue="" />
+                                                        <f:selectItems value="#{mantenimientocore.listaUser}" var="usr1"
+                                                                       itemLabel="#{usr1.nombreusuario } #{usr1.apellidousuario }" 
+                                                                       itemValue="#{usr1.idUsuario}"> </f:selectItems>
+						</p:selectOneMenu>   
+                                 
+                                <center>        
+                                    <p:commandButton id="cbIngresar"   value="ACTUALIZAR" icon ="fa fa-wrench" action="#{mantenimientocore.actualizarModalPanel()}" update=":listaMantenimientos"></p:commandButton>
+                                </center>     
+                            </h:panelGrid>
+                            </p:panel>   
+                        </center>
+                    </h:form>
+                </p:dialog>
+
+                <!-- DIALOG PARA ELIMINAR -->    
+                <p:dialog header="Eliminar" id="eliminarModal" widgetVar="eliminarModal"  resizable="false" draggable="false" position="center" width="400" height="100" appendTo="@(body)" style="background-color: darkturquoise" >
+                    <h:form id="frmDialogEliminar">
+                        <center>
+                            <p:panel id="pnlEditDepa" header="ELIMINAR MANTENIMIENTO">
+                                <p:separator style="border-color: orange"></p:separator>
+                                <h:panelGrid columns="2">
+                                    <center>
+                                        <p:outputLabel value="Esta seguro de eliminar este registro"> </p:outputLabel>
+                                        <p:commandButton id="cbEliminar"  value="ELIMINAR" icon ="fa fa-university" action="#{mantenimientocore.eliminarModalPanel()}" oncomplete="PF('eliminarModal').hide();" update=":listaMantenimientos" ></p:commandButton>
+                                    </center>
+                                </h:panelGrid>
+                            </p:panel>   
+                        </center>
+                    </h:form>
+                </p:dialog>
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

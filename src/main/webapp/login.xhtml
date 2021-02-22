@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>CONTROL DE ACTIVOS T.I.</title>
+            </f:facet>
+        </h:head>
+        <style>
+            body{
+                font-size: 10px;
+            }
+        </style>
+        <h:body>
+            <p:layout fullPage="true">
+                
+                <center>
+                    <p:layoutUnit position="north" size="90" resizable="false" closable="false" collapsible="false">
+                        <h:graphicImage name="/images/cabecera1.png" width="1100" height="80"  alt="principal" />
+                    </p:layoutUnit>                                    
+                </center> 
+                <p:layoutUnit position="center">
+                    <center>
+                    <marquee style="width:130px; font-style: initial; color: orange " direction="lefth" >BIENVENID@</marquee>
+                    <h:form>
+                        <p:growl id="messages" showDetail="true" />
+                        <br/><br/><br/><br/><br/><br/><br/>
+                        <center>
+                            <h:graphicImage name="/images/blue_users.png" width="150" height="80"  alt="formulariodepartamentos" />
+                        </center>
+                        <p:panelGrid id="bpLogin" columns="2"> 
+                                    <p:outputLabel value="Usuario:"></p:outputLabel>
+                                    <p:inputText id="biCed" 
+                                                 value="#{usercore.usuarioSesion.userName}"
+                                                 autocomplete="off"
+                                                 required="true"
+                                                 requiredMessage="Por favor ingrese el usuario"
+                                                 validatorMessage="Por favor ingrese el usuario">
+                                        <f:validateLength minimum="5" maximum="20" for="biCed"/>
+                                    </p:inputText>
+                                    <p:outputLabel value="Contraseña:"></p:outputLabel>
+                                    <p:password id="biPass" 
+                                                value="#{usercore.usuarioSesion.password}"
+                                                 autocomplete="off"
+                                                 required="true"
+                                                 requiredMessage="Por favor ingrese la contraseña"
+                                                 validatorMessage="Por favor ingrese la contraseña">
+                                        <f:validateLength minimum="5" maximum="20" for="biPass"/>
+                                    </p:password>
+                        </p:panelGrid>
+                        <br/>
+                        <p:commandButton id="botones" value="LOGIN" action="#{usercore.iniciarSesion}" update="@form, messages"></p:commandButton>
+                        
+                        <br/><br/><br/><br/><br/><br/><br/>
+                        
+                    </h:form>
+                    <div id="pie">
+                        <div id="texto">
+                            <p:separator />
+                            <p:separator />
+                            <p:row>Derechos Reservados © 2021</p:row>
+                        </div>
+                    </div>
+                    </center>
+                    
+                    
+                    
+                </p:layoutUnit>
+            </p:layout>
+        </h:body>
+    </f:view>
+</html>

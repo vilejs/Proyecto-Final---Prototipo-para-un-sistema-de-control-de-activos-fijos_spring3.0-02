@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <ui:composition template="/indexprincipal.xhtml">     
+            <ui:define name="windowTitle">#{msgs.planetariumTitle}</ui:define> 
+            <ui:define name="content">
+                <h:graphicImage name="/images/franja.PNG" width="1200" height="80"  alt="consultas" />
+                <h:form id="listaUsuarios">
+                     <center>
+                        <p:panel header="CONSULTAS"/>
+                    </center>     
+                   <p:dataTable id="listarUsuarios" value="#{usuarioscore.listaUser}"
+                                 var="listarUsuarios" widgetVar="listarUsuarios"
+                                 rows="5"
+                                 paginator="true"
+                                 paginatorPosition="bottom"
+                                 scrollable="true"
+                                 scrollRows="5"
+                                 scrollHeight="150">
+                        <f:facet name="header">
+                            <h:commandLink>
+                                <h:graphicImage url="/resources/images/pdf.png" width="24"/>
+                                <p:dataExporter type="pdf" target="listarUsuarios" fileName="ReporteUsuarios"/>
+                            </h:commandLink>  
+                        </f:facet>
+                        <f:facet name="header">
+                            <h:commandLink>
+                                <h:graphicImage url="/resources/images/exel.png" width="24"/>
+                                <p:dataExporter type="xls" target="listarUsuarios" fileName="ReporteUsuarios"/>
+                            </h:commandLink>  
+                        </f:facet>
+                        <p:column id="coId" headerText="Id"  filterBy="#{listarUsuarios.idUsuario}">
+                            <p:outputLabel value="#{listarUsuarios.idUsuario} "> </p:outputLabel>
+                        </p:column>
+                        <center>
+                            <p:commandButton id="cbRegistrar" icon ="fa fa-user-plus" action="#{usuarioscore.insertarUsuarios()}" update="formulariusuarios" value="REGISTRAR"  style="margin-right:80px;"></p:commandButton>
+                        </center>
+                    </p:dataTable>
+                </h:form>
+            </ui:define>
+        </ui:composition>
+
+    </h:body>
+</html>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <ui:composition template="/indexprincipal.xhtml">     
+            <ui:define name="windowTitle">
+                #{msgs.planetariumTitle}
+            </ui:define> 
+
+            <ui:define name="content">
+                <center>
+                <h:graphicImage name="/images/usuarios.png" width="1200" height="80"  alt="formclientes" />
+</center>
+                <h:form id="formulariusuarios">
+                    <p:growl id="messages" showDetail="true" />
+                   <center>
+                        <p:panel id="pIngresoClientes" header="INGRESE LOS DATOS DEL RESPONSABLE" toggleable="true" closable="true" toggleSpeed="500" closeSpeed="500" widgetVar="panel" style="margin-bottom:20px">
+                            <h:graphicImage name="/images/usuario.png" width="150" height="150"  alt="formclientes" />
+                            <p:separator style="border-color: orange"></p:separator>
+                            <h:panelGrid columns="2">
+                                <p:outputLabel id="olCedula" value="Cedula"> </p:outputLabel>
+                                <p:inputText id="Cedula" required="true" size="20" value="#{usuarioscore.cedulausuario}"></p:inputText>
+
+                                <p:outputLabel id="olNombre" value="Nombre"> </p:outputLabel>
+                                <p:inputText id="Nombres" required="true" size="20" value="#{usuarioscore.nombreusuario}"></p:inputText>
+
+                                <p:outputLabel id="olApellido" value="Apellido"> </p:outputLabel>
+                                <p:inputText id="Apellidos" required="true" size="20" value="#{usuarioscore.apellidousuario}"></p:inputText>
+
+                                <p:outputLabel id="olDireccion" value="Direccion"> </p:outputLabel>
+                                <p:inputText id="Direccion" required="true" size="20" value="#{usuarioscore.direccionusuario}"></p:inputText>
+
+                                <p:outputLabel id="olTelefono" value="Telefono"> </p:outputLabel>
+                                <p:inputText id="Telefono" required="true" size="20" value="#{usuarioscore.telefonousuario}"></p:inputText>
+
+                                <p:outputLabel id="olCorreo" value="Correo"> </p:outputLabel>
+                                <p:inputText id="Correo" required="true" size="20" value="#{usuarioscore.correousuario}"></p:inputText>
+                                
+                                <p:outputLabel id="oldepartamento" value="Departamento"> </p:outputLabel>
+                                <p:selectOneMenu id="console" value="#{usuarioscore.idDepartamento}" 
+						panelStyle="width:250px">
+							<f:selectItem itemLabel="Seleccionar" itemValue="" />
+                                                        <f:selectItems value="#{usuarioscore.listarDepart}" var="dept"
+                                                                       itemLabel="#{dept.nombredpto}" 
+                                                                       itemValue="#{dept.idDepartamento}"> </f:selectItems>
+						</p:selectOneMenu>                                                       
+                                                              
+                            <center>
+                            <p:commandButton id="cbRegistrar" icon ="fa fa-user-plus" action="#{usuarioscore.insertarUsuarios()}" update="formulariusuarios" value="REGISTRAR"  style="margin-right:80px;"></p:commandButton>
+                            </center>
+                                 </h:panelGrid>
+                        </p:panel>
+                    </center>                 
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,23 @@
+
+#principal{
+    width: 500px;
+    margin: 0 auto;
+     background-image: url(../images/registro.jpg);
+}
+#centroFormulario{
+    margin: 100px auto;
+/*    width: 20%;*/
+    text-align: center;
+    background: cadetblue;
+}
+
+#imagen{
+    background-image: url(../images/registro.jpg);
+}
+
+#colorButton{
+    background: #ff6666;
+    width: 100px;
+    margin-bottom: auto;
+        
+}

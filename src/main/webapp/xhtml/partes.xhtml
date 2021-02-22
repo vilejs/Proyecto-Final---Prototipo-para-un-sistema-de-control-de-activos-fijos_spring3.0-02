@@ -1,0 +1,78 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <ui:composition template="/indexprincipal.xhtml">     
+            <ui:define name="windowTitle">
+                #{msgs.planetariumTitle}
+            </ui:define> 
+
+            <ui:define name="content">
+
+                <h:form id="formulariopartes">
+                    <p:growl id="messages" showDetail="true" />
+                     <center>
+                    <h:graphicImage name="/images/partes.png" width="1200" height="80"  alt="formulariopartes" />
+                    </center>
+                    
+                   <center>
+                       
+
+                            <p:panel header="INGRESE LOS DATOS DE LA PARTE">
+
+                                <h:graphicImage name="/images/part.png" width="150" height="150"  alt="formulariopartes" />
+                                  <p:separator style="border-color: orange"></p:separator>
+
+                                 
+                                    <h:panelGrid columns="2">
+                                    
+                                    <p:outputLabel id="olparte" value="Parte"> </p:outputLabel>
+                                    <p:inputText id="parte" required="true" size="20" value="#{partecore.parte}"></p:inputText>  
+                                    
+                                    <p:outputLabel id="olTipoparte" value="Tipo"> </p:outputLabel>
+                                    <p:inputText id="tipoparte" required="true" size="20" value="#{partecore.tipoparte}"></p:inputText>
+
+                                    <p:outputLabel id="olMarcaparte" value="Marca"> </p:outputLabel>
+                                    <p:inputText id="marcaparte" required="true" size="20" value="#{partecore.marcaparte}"></p:inputText>
+
+                                    <p:outputLabel id="olNoserieparte" value="No Serie"> </p:outputLabel>
+                                    <p:inputText id="noserieparte" required="true" size="20" value="#{partecore.noserieparte}"></p:inputText>
+
+                                     <p:outputLabel id="olFechaparte" value="Fecha"> </p:outputLabel>
+                                    <p:inputText id="fechaparte" required="true" value="#{partecore.fechaparte}"></p:inputText>
+                                    
+                                    <p:outputLabel id="oldescripcionparte" value="Descripcion"> </p:outputLabel>
+                                    <p:inputTextarea id="descripcionparte" required="true" value="#{partecore.descripcionparte}" cols="20" rows="6" placeholder="Ingrese las caracteristicas o la descripcion de la parte"/>
+                                 					
+                                     <p:outputLabel id="olitem" value="Item"> </p:outputLabel>
+                                     <p:selectOneMenu id="console1" value="#{partecore.idItem}" 
+						panelStyle="width:250px">
+							<f:selectItem itemLabel="Seleccionar" itemValue="" />
+                                                        <f:selectItems value="#{partecore.listaitm}" var="itm"
+                                                                       itemLabel="#{itm.item}  #{itm.noserieitem}" 
+                                                                       itemValue="#{itm.idItem}"> </f:selectItems>
+						</p:selectOneMenu>   
+                                    
+                                    <center>
+                                        <p:commandButton id="cbIngresar"  value="INGRESAR" icon ="fa fa-microchip" action="#{partecore.insertarPartes()}" update="formulariopartes"></p:commandButton>
+                                    </center>
+                                 </h:panelGrid>
+                                      
+                                      
+                            </p:panel>
+                        
+                        
+                        
+                    </center>  
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

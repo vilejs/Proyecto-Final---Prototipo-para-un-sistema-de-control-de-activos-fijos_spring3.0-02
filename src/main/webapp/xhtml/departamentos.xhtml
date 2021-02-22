@@ -1,0 +1,52 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <ui:composition template="/indexprincipal.xhtml">     
+            <ui:define name="windowTitle">
+                #{msgs.planetariumTitle}
+            </ui:define> 
+            <ui:define name="content">
+
+                <h:form id="formulariodepartamentos">
+                    <p:growl id="messages" showDetail="true" />
+                                        <center>
+
+                    <h:graphicImage name="/images/departamentos.png" width="1200" height="80"  alt="formulariodepartamentos" />
+                                       </center>
+
+                    <center>
+                   
+                        
+                         <p:panel header="INGRESE EL DEPARTAMENTO">
+
+                                <h:graphicImage name="/images/dptos.png" width="150" height="150"  alt="formulariodepartamentos" />
+                                  <p:separator style="border-color: orange"></p:separator>
+                        
+                            <h:panelGrid columns="2">
+                                <p:outputLabel id="olNombredpto" value="Departamento"> </p:outputLabel>
+                                <p:inputText id="Nombredpto" required="true" size="20" value="#{departamentoscore.nombredpto}"></p:inputText>
+
+                                <p:outputLabel id="olExtensiondpto" value="Extension"> </p:outputLabel>
+                                <p:inputText id="Extensiondpto" required="true" size="20" value="#{departamentoscore.extensiondpto}"></p:inputText>
+
+                         
+                            <center>
+                                <p:commandButton id="cbIngresar"  value="INGRESAR" icon ="fa fa-university" action="#{departamentoscore.insertarDepartamentos()}" update="formulariodepartamentos"></p:commandButton>
+                            </center>
+                          </h:panelGrid>
+                        
+                            </p:panel>   
+                  
+                    </center>              
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

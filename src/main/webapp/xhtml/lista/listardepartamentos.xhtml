@@ -1,0 +1,123 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <ui:composition template="/indexprincipal.xhtml">     
+            <ui:define name="windowTitle">
+                #{msgs.planetariumTitle}
+            </ui:define> 
+
+            <ui:define name="content">
+
+                <h:form id="listaDepartamentos">
+
+                    <h:graphicImage name="/images/franja.PNG" width="1200" height="80"  alt="listaDepartamentos" />
+
+                    <center>
+                        <p:panel header="LISTA DE DEPARTAMENTOS REGISTRADOS"/>
+                    </center>
+
+                    <h:panelGrid style="border: 0px;" id="Departamentos" >
+
+                        <p:dataTable id="listarDepartamentos" value="#{departamentoscore.listarDepart}"
+                                     var="listarDepartamentos" widgetVar="listarDepartamentos"
+                                     rows="5"
+                                     paginator="true"
+                                     paginatorPosition="bottom"
+                                     scrollable="true"
+                                     scrollRows="5"
+                                     scrollHeight="150">
+                            <p:column id="coId" headerText="Id" filterBy="#{listarDepartamentos.idDepartamento}">
+                                <p:outputLabel value="#{listarDepartamentos.idDepartamento}">  </p:outputLabel>
+                            </p:column>
+                            <p:column id="coNombredpto" headerText="Departamento" filterBy="#{listarDepartamentos.nombredpto}">
+                                <p:outputLabel value="#{listarDepartamentos.nombredpto}">  </p:outputLabel>
+                            </p:column>
+                            <p:column id="coExtensiondpto" headerText="Extensión" filterBy="#{listarDepartamentos.extensiondpto}">
+                                <p:outputLabel value="#{listarDepartamentos.extensiondpto}">  </p:outputLabel>
+                            </p:column>
+                            
+                            <p:column id="coEditDpto" headerText="Editar" width="30" rendered="#{usercore.preguntaAdministrador or usercore.preguntaNormal}">
+                                <p:commandButton icon="ui-icon-pencil" title="Editar departamentor" update=":frmDepartamentoEdit" 
+                                 actionListener="#{departamentoscore.editarDepartamento(listarDepartamentos)}" oncomplete="PF('editarDepa').show();">
+                                    <f:setPropertyActionListener target="#{departamentoscore.editarDepartamentos}" value="#{listarDepartamentos}"></f:setPropertyActionListener>
+                                </p:commandButton>
+                            </p:column>
+                            
+                            <p:column id="coElimDpto" headerText="Eliminar" width="35" rendered="#{usercore.preguntaAdministrador}">
+                                <p:commandButton icon="ui-icon-trash" title="Eliminar departamentor" 
+                                    update=":frmEliminarDepartamento" 
+                                    actionListener="#{departamentoscore.editarDepartamento(listarDepartamentos)}" oncomplete="PF('eliminaDepa').show();">
+                                    <f:setPropertyActionListener target="#{departamentoscore.editarDepartamentos}" value="#{listarDepartamentos}"></f:setPropertyActionListener>
+                                </p:commandButton>
+                            </p:column>
+
+                            <f:facet name="header">
+                                <h:commandLink>
+                                    <h:graphicImage url="/resources/images/pdf.png" width="24"/>
+                                    <p:dataExporter type="pdf" target="listarDepartamentos" fileName="ReporteDepartamentos"/>
+                                </h:commandLink>  
+                            </f:facet>
+
+                            <f:facet name="header">
+                                <h:commandLink>
+                                    <h:graphicImage url="/resources/images/exel.png" width="24"/>
+                                    <p:dataExporter type="xls" target="listarDepartamentos" fileName="ReporteDepartamentos"/>
+                                </h:commandLink>  
+                            </f:facet>
+
+
+
+                        </p:dataTable>
+                    </h:panelGrid>
+
+                </h:form>
+
+                <!-- DIALOG PARA EDITAR -->    
+                <p:dialog header="Editar" id="editarDepa" widgetVar="editarDepa"  resizable="false" draggable="false" position="center" width="600" height="200" appendTo="@(body)" style="background-color: darkturquoise" >
+                    <h:form id="frmDepartamentoEdit">
+                        <center>
+                            <p:panel id="pnlEditDepa" header="EDITAR EL DEPARTAMENTO">
+                                <p:separator style="border-color: orange"></p:separator>
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel id="olNombredpto" value="Departamento"> </p:outputLabel>
+                                    <p:inputText id="Nombredpto" required="true" size="20" value="#{departamentoscore.editarDepartamentos.nombredpto}"></p:inputText>
+                                    <p:outputLabel id="olExtensiondpto" value="Extension"> </p:outputLabel>
+                                    <p:inputText id="Extensiondpto" required="true" size="20" value="#{departamentoscore.editarDepartamentos.extensiondpto}"></p:inputText>
+                                    <center>
+                                        <p:commandButton id="cbIngresar"  value="EDITAR" icon ="fa fa-university" action="#{departamentoscore.actualizarDepa()}" oncomplete="PF('editarDepa').hide();" update=":listaDepartamentos" ></p:commandButton>
+                                    </center>
+                                </h:panelGrid>
+                            </p:panel>   
+                        </center>
+                    </h:form>
+                </p:dialog>
+
+                <!-- DIALOG PARA ELIMINAR -->    
+                <p:dialog header="Eliminar" id="eliminaDepa" widgetVar="eliminaDepa"  resizable="false" draggable="false" position="center" width="400" height="100" appendTo="@(body)" style="background-color: darkturquoise" >
+                    <h:form id="frmEliminarDepartamento">
+                         <center>
+                            <p:panel id="pnlEditDepa" header="ELIMINAR DEPARAMENTO">
+                                <p:separator style="border-color: orange"></p:separator>
+                                <h:panelGrid columns="2">
+                                     <center>
+                                        <p:outputLabel value="Esta seguro de eliminar este departamento"> </p:outputLabel>
+                                        <p:commandButton id="cbEliminar"  value="ELIMINAR" icon ="fa fa-university" action="#{departamentoscore.eliminarDepartamento()}" oncomplete="PF('eliminaDepa').hide();" update=":listaDepartamentos" ></p:commandButton>
+                                    </center>
+                                </h:panelGrid>
+                            </p:panel>   
+                        </center>
+                    </h:form>
+                </p:dialog>
+
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

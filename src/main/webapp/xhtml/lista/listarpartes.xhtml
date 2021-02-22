@@ -1,0 +1,162 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <ui:composition template="/indexprincipal.xhtml">     
+            <ui:define name="windowTitle">
+                #{msgs.planetariumTitle}
+            </ui:define> 
+
+            <ui:define name="content">
+
+                <h:form id="listapartes">
+
+                    <h:graphicImage name="/images/franja.PNG" width="1200" height="80"  alt="listapartes" />                                                     
+                    <center>
+                        <p:panel header="LISTA DE PARTES REGISTRADAS"/>
+                    </center>
+
+
+
+                    <h:panelGrid style="border: 0px;" id="Reparo" >
+
+                        <p:dataTable id="listarPartes" value="#{partecore.listapart}"
+                                     var="listarPartes" widgetVar="listarPartes"
+                                     rows="5"
+                                     paginator="true"
+                                     paginatorPosition="bottom"
+                                     scrollable="true"
+                                     scrollRows="5"
+                                     scrollHeight="150">
+                            <p:column id="coId" headerText="Id" filterBy="#{listarPartes.idParte}">
+                                <p:outputLabel value="#{listarPartes.idParte}">  </p:outputLabel>
+                            </p:column>
+                            <p:column id="coParte" headerText="Parte" filterBy="#{listarPartes.parte}">
+                                <p:outputLabel value="#{listarPartes.parte}">  </p:outputLabel>
+                            </p:column>
+                            <p:column id="coTipoparte" headerText="Tipo" filterBy="#{listarPartes.tipoparte}">
+                                <p:outputLabel value="#{listarPartes.tipoparte}">  </p:outputLabel>
+                            </p:column>
+                            <p:column id="coMarcaparte" headerText="Marca" filterBy="#{listarPartes.marcaparte}">
+                                <p:outputLabel value="#{listarPartes.marcaparte}">  </p:outputLabel>
+                            </p:column>
+
+                            <p:column id="coNoSerieparte" headerText="No Serie" filterBy="#{listarPartes.noserieparte}">
+                                <p:outputLabel value="#{listarPartes.noserieparte}">  </p:outputLabel>
+                            </p:column>
+                            <p:column id="coPDescripcionparte" headerText="Descripcion" filterBy="#{listarPartes.descripcionparte}">
+                                <p:outputLabel value="#{listarPartes.descripcionparte}">  </p:outputLabel>
+                            </p:column>
+
+                            <p:column id="coFechaparte" headerText="Fecha" filterBy="#{listarPartes.fechaparte}">
+                                <p:outputLabel value="#{listarPartes.fechaparte}">  </p:outputLabel>
+                            </p:column>
+
+                            <p:column headerText="Item" filterBy="#{listarPartes.fkItem.item}">
+                                <h:outputText value="#{listarPartes.fkItem.item} 
+                                              #{listarPartes.fkItem.noserieitem}" />
+                            </p:column>
+
+                            <p:column id="coEditDpto" headerText="Editar" width="30"  rendered="#{usercore.preguntaAdministrador or usercore.preguntaNormal}">
+                                <p:commandButton icon="ui-icon-pencil" title="Editar Partes" update=":frmDialogEditar" actionListener="#{partecore.editarModalPanel(listarPartes)}" oncomplete="PF('editarModal').show();">
+                                    <f:setPropertyActionListener target="#{partecore.editarObjeto}" value="#{listarPartes}"></f:setPropertyActionListener>
+                                </p:commandButton>
+                            </p:column>
+
+                            <p:column id="coElimDpto" headerText="Eliminar" width="35" rendered="#{usercore.preguntaAdministrador}"> 
+                                <p:commandButton icon="ui-icon-trash" title="Eliminar Partes" update=":frmDialogEliminar" actionListener="#{partecore.editarModalPanel(listarPartes)}" oncomplete="PF('eliminarModal').show();">
+                                    <f:setPropertyActionListener target="#{partecore.editarObjeto}" value="#{listarPartes}"></f:setPropertyActionListener>
+                                </p:commandButton>
+                            </p:column>
+
+                            <f:facet name="header">
+                                <h:commandLink>
+                                    <h:graphicImage url="/resources/images/pdf.png" width="24"/>
+                                    <p:dataExporter type="pdf" target="listarPartes" fileName="ReportePartes"/>
+                                </h:commandLink>  
+                            </f:facet>
+
+                            <f:facet name="header">
+                                <h:commandLink>
+                                    <h:graphicImage url="/resources/images/exel.png" width="24"/>
+                                    <p:dataExporter type="xls" target="listarPartes" fileName="ReportePartes"/>
+                                </h:commandLink>  
+                            </f:facet>
+
+                        </p:dataTable>
+                    </h:panelGrid>
+
+                </h:form>
+                
+                
+                 <!-- DIALOG PARA EDITAR -->    
+                <p:dialog header="Editar" id="editarModal" widgetVar="editarModal"  resizable="false" draggable="false" position="center" width="600" height="380" appendTo="@(body)" style="background-color: darkturquoise" >
+                    <h:form id="frmDialogEditar">
+                        <center>
+                            <p:panel id="pnlEditDepa" header="EDITAR EL PARTES">
+                                <p:separator style="border-color: orange"></p:separator>
+                                 <h:panelGrid columns="2">
+                                    
+                                    <p:outputLabel id="olparte" value="Parte"> </p:outputLabel>
+                                    <p:inputText id="parte" required="true" size="20" value="#{partecore.editarObjeto.parte}"></p:inputText>  
+                                    
+                                    <p:outputLabel id="olTipoparte" value="Tipo"> </p:outputLabel>
+                                    <p:inputText id="tipoparte" required="true" size="20" value="#{partecore.editarObjeto.tipoparte}"></p:inputText>
+
+                                    <p:outputLabel id="olMarcaparte" value="Marca"> </p:outputLabel>
+                                    <p:inputText id="marcaparte" required="true" size="20" value="#{partecore.editarObjeto.marcaparte}"></p:inputText>
+
+                                    <p:outputLabel id="olNoserieparte" value="No Serie"> </p:outputLabel>
+                                    <p:inputText id="noserieparte" required="true" size="20" value="#{partecore.editarObjeto.noserieparte}"></p:inputText>
+
+                                     <p:outputLabel id="olFechaparte" value="Fecha"> </p:outputLabel>
+                                    <p:inputText id="fechaparte" required="true" value="#{partecore.editarObjeto.fechaparte}"></p:inputText>
+                                    
+                                    <p:outputLabel id="oldescripcionparte" value="Descripcion"> </p:outputLabel>
+                                    <p:inputTextarea id="descripcionparte" required="true" value="#{partecore.editarObjeto.descripcionparte}" cols="20" rows="6" placeholder="Ingrese las caracteristicas o la descripcion de la parte"/>
+                                 					
+                                     <p:outputLabel id="olitem" value="Item"> </p:outputLabel>
+                                     <p:selectOneMenu id="console1" value="#{partecore.idItem}" 
+						panelStyle="width:250px">
+							<f:selectItem itemLabel="Seleccionar" itemValue="" />
+                                                        <f:selectItems value="#{partecore.listaitm}" var="itm"
+                                                                       itemLabel="#{itm.item}  #{itm.noserieitem}" 
+                                                                       itemValue="#{itm.idItem}"> </f:selectItems>
+						</p:selectOneMenu>   
+                                    
+                                    <center>
+                                        <p:commandButton id="cbIngresar"  value="ACTUALIZAR" icon ="fa fa-microchip" action="#{partecore.actualizarModalPanel()}" update=":listapartes"></p:commandButton>
+                                    </center>
+                                 </h:panelGrid>
+                            </p:panel>   
+                        </center>
+                    </h:form>
+                </p:dialog>
+
+                <!-- DIALOG PARA ELIMINAR -->    
+                <p:dialog header="Eliminar" id="eliminarModal" widgetVar="eliminarModal"  resizable="false" draggable="false" position="center" width="400" height="100" appendTo="@(body)" style="background-color: darkturquoise" >
+                    <h:form id="frmDialogEliminar">
+                        <center>
+                            <p:panel id="pnlEditDepa" header="ELIMINAR PARTES">
+                                <p:separator style="border-color: orange"></p:separator>
+                                <h:panelGrid columns="2">
+                                    <center>
+                                        <p:outputLabel value="Esta seguro de eliminar este registro"> </p:outputLabel>
+                                        <p:commandButton id="cbEliminar"  value="ELIMINAR" icon ="fa fa-university" action="#{mantenimientocore.eliminarModalPanel()}" oncomplete="PF('eliminarModal').hide();" update=":listapartes" ></p:commandButton>
+                                    </center>
+                                </h:panelGrid>
+                            </p:panel>   
+                        </center>
+                    </h:form>
+                </p:dialog>
+                
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

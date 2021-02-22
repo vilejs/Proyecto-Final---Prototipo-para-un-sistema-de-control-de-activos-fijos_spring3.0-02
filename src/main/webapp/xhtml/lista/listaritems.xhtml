@@ -1,0 +1,195 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <ui:composition template="/indexprincipal.xhtml">     
+            <ui:define name="windowTitle">
+                #{msgs.planetariumTitle}
+            </ui:define> 
+
+            <ui:define name="content">
+
+                <h:form id="formularioitem">
+
+                    <h:graphicImage name="/images/franja.PNG" width="1200" height="80"  alt="listaitem" />
+                   
+                    <center>
+                        <p:panel header="LISTA DE ITEMS REGISTRADOS"/>
+
+                        <h:panelGrid style="border: 0px;" id="Items">
+
+                            <p:dataTable id="listarItems" value="#{itemscore.listaitm}"
+                                         var="listarItems" widgetVar="listarItems"
+                                         rows="5"
+                                         paginator="true"
+                                         paginatorPosition="bottom"
+                                         scrollable="true"
+                                         scrollRows="5"
+                                         scrollHeight="150">
+
+                                <p:column id="coId" headerText="Id" filterBy="#{listarItems.idItem}">
+                                    <p:outputLabel value="#{listarItems.idItem}">  </p:outputLabel>
+                                </p:column>
+                                <p:column id="coNombre" headerText="Item" filterBy="#{listarItems.item}">
+                                    <p:outputLabel value="#{listarItems.item}">  </p:outputLabel>
+                                </p:column>
+                                <p:column id="coApellido" headerText="Marca" filterBy="#{listarItems.marcaitem}">
+                                    <p:outputLabel value="#{listarItems.marcaitem}">  </p:outputLabel>
+                                </p:column>
+                                <p:column id="coCorreo" headerText="Modelo" filterBy="#{listarItems.modeloitem}">
+                                    <p:outputLabel value="#{listarItems.modeloitem}">  </p:outputLabel>
+                                </p:column>
+                                <p:column id="coTelefono" headerText="No Serie" filterBy="#{listarItems.noserieitem}">
+                                    <p:outputLabel value="#{listarItems.noserieitem}">  </p:outputLabel>
+                                </p:column>
+                                <p:column id="coMarca" headerText="Color" filterBy="#{listarItems.coloritem}">
+                                    <p:outputLabel value="#{listarItems.coloritem}">  </p:outputLabel>
+                                </p:column>
+                                <p:column id="coModelo" headerText="Fecha" filterBy="#{listarItems.fechaitem}">
+                                    <p:outputLabel value="#{listarItems.fechaitem}">  </p:outputLabel>
+                                </p:column>
+                                <p:column id="coDescripción" headerText="Descripción" filterBy="#{listarItems.descripcionitem}">
+                                    <p:outputLabel value="#{listarItems.descripcionitem}">  </p:outputLabel>
+                                </p:column>
+                                
+                                <p:column id="coestadoitem" headerText="Descripción" filterBy="#{listarItems.estadoitem}">
+                                    <p:outputLabel value="#{listarItems.estadoitem}">  </p:outputLabel>
+                                </p:column>
+                                
+                                <p:column headerText="Departamento" filterBy="#{listarItems.fkDepartamento.nombredpto}">
+                                <p:outputLabel value="#{listarItems.fkDepartamento.nombredpto}" > </p:outputLabel>
+						</p:column>
+                                
+                                <p:column headerText="Responsable" filterBy="#{listarItems.fkUsuario.apellidousuario}">
+                                    <h:outputText value="#{listarItems.fkUsuario.nombreusuario} 
+                                                  #{listarItems.fkUsuario.apellidousuario}" />
+						</p:column>
+                                
+                                <p:column id="coEdit" headerText="Editar" width="30"  rendered="#{usercore.preguntaAdministrador or usercore.preguntaNormal}">
+                                    <p:commandButton icon="ui-icon-pencil" title="Editar Items" update=":frmEditarModal" actionListener="#{itemscore.editarModalPanel(listarItems)}" oncomplete="PF('editarModal').show();">
+                                    <f:setPropertyActionListener target="#{itemscore.editarObjeto}" value="#{listarItems}"></f:setPropertyActionListener>
+                                </p:commandButton>
+                                </p:column>
+                                
+                                <p:column id="coElim" headerText="Eliminar" width="35" rendered="#{usercore.preguntaAdministrador}">
+                                <p:commandButton icon="ui-icon-trash" title="Eliminar Items" update=":frmEliminarModal" actionListener="#{itemscore.editarModalPanel(listarItems)}" oncomplete="PF('eliminarModal').show();">
+                                    <f:setPropertyActionListener target="#{itemscore.editarObjeto}" value="#{listarItems}"></f:setPropertyActionListener>
+                                </p:commandButton>
+                                </p:column>
+                                
+                                <f:facet name="header">
+                                    <h:commandLink>
+                                        <h:graphicImage url="/resources/images/pdf.png" width="24"/>
+                                        <p:dataExporter type="pdf" target="listarItems" fileName="ReporteItems"/>
+                                    </h:commandLink>  
+                                </f:facet>
+                                
+                                <f:facet name="header">
+                                    <h:commandLink>
+                                        <h:graphicImage url="/resources/images/exel.png" width="24"/>
+                                        <p:dataExporter type="xls" target="listarItems" fileName="ReporteItems"/>
+                                    </h:commandLink>  
+                                </f:facet>
+
+                            </p:dataTable>
+                        </h:panelGrid>
+                    </center>
+                </h:form>
+                
+                
+                <!-- DIALOG PARA EDITAR -->    
+                <p:dialog header="Editar" id="editarModal" widgetVar="editarModal"  resizable="false" draggable="false" position="center" width="600" height="450" appendTo="@(body)" style="background-color: darkturquoise" >
+                    <h:form id="frmEditarModal">
+                        <center>
+                            <p:panel id="pnlEditModal" header="EDITAR EL ITEM">
+                                <p:separator style="border-color: orange"></p:separator>
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel id="olNitem" value="Item"> </p:outputLabel>
+                                    <p:inputText id="item" required="true" size="20" value="#{itemscore.editarObjeto.item}"></p:inputText>
+
+                                    <p:outputLabel id="olmarcaitem" value="Marca"> </p:outputLabel>
+                                    <p:inputText id="marcaitem" required="true" size="20" value="#{itemscore.editarObjeto.marcaitem}"></p:inputText>
+
+                                    <p:outputLabel id="olmodeloitem" value="Modelo"> </p:outputLabel>
+                                    <p:inputText id="modeloitem" required="true" size="20" value="#{itemscore.editarObjeto.modeloitem}"></p:inputText>
+
+                                    <p:outputLabel id="olnoserieitem" value="No Serie"> </p:outputLabel>
+                                    <p:inputText id="noserieitem" required="true" size="20" value="#{itemscore.editarObjeto.noserieitem}"></p:inputText>
+                                    
+                                    <p:outputLabel id="olcoloritem" value="Color"> </p:outputLabel>
+                                    <p:inputText id="coloritem" required="true" size="20" value="#{itemscore.editarObjeto.coloritem}"></p:inputText>
+                                    
+                                    <p:outputLabel id="olfechaitem" value="Fecha"> </p:outputLabel>
+                                     <p:inputText id="fechaitem" required="true" value="#{itemscore.editarObjeto.fechaitem}"></p:inputText>
+
+                                    <p:outputLabel id="oldescripcionitem" value="Descripción"> </p:outputLabel>
+                                    <p:inputTextarea id="descripcionitem" required="true" value="#{itemscore.editarObjeto.descripcionitem}" cols="20" rows="6" placeholder="Ingrese la lista de repuestos o repuesto único a cotizar"/>
+
+                                    <p:outputLabel id="olestadoitem" value="Estado"> </p:outputLabel>
+                                    <p:selectOneMenu id="estadoitem" required="true" value="#{itemscore.editarObjeto.estadoitem}" style="width:140px">
+                                    <f:selectItem itemLabel="Seleccione" itemValue="" />
+                                    <f:selectItem itemLabel="Operativo" itemValue="Operativo" />
+                                    <f:selectItem itemLabel="No operativo" itemValue="No operativo" />
+                                    <f:selectItem itemLabel="En reparacion" itemValue="En reparacion" />
+                                    <f:selectItem itemLabel="Dado de baja" itemValue="Dado de baja" />
+                                 </p:selectOneMenu>   
+                                    
+                                     <p:outputLabel id="oldepartamento" value="Departamento"> </p:outputLabel>
+                                     <p:selectOneMenu id="console1" value="#{itemscore.idDepartamento}" 
+						panelStyle="width:250px">
+							<f:selectItem itemLabel="Seleccionar" itemValue="" />
+                                                        <f:selectItems value="#{itemscore.listarDepart}" var="dept"
+                                                                       itemLabel="#{dept.nombredpto}" 
+                                                                       itemValue="#{dept.idDepartamento}"> </f:selectItems>
+						</p:selectOneMenu>   
+                                     
+                                      <p:outputLabel id="olusuario" value="Usuario"> </p:outputLabel>
+                                      <p:selectOneMenu id="console2" value="#{itemscore.idUsuario}" 
+						panelStyle="width:250px">
+							<f:selectItem itemLabel="Seleccionar" itemValue="" />
+                                                        <f:selectItems value="#{itemscore.listaUser}" var="usr"
+                                                                       itemLabel="#{usr.nombreusuario } #{usr.apellidousuario }" 
+                                                                       itemValue="#{usr.idUsuario}"> </f:selectItems>
+						</p:selectOneMenu>   
+
+
+                                    <center>   
+
+                                        <p:commandButton id="cbRegistrar"  value="ACTUALIZAR" icon ="fa fa-laptop" action="#{itemscore.actualizarModalPanel()}" update="formularioitem"></p:commandButton>
+                                    </center>
+
+                                </h:panelGrid>
+                            </p:panel>   
+                        </center>
+                    </h:form>
+                </p:dialog>
+
+                <!-- DIALOG PARA ELIMINAR -->    
+                <p:dialog header="Eliminar" id="eliminarModal" widgetVar="eliminarModal"  resizable="false" draggable="false" position="center" width="400" height="100" appendTo="@(body)" style="background-color: darkturquoise" >
+                    <h:form id="frmEliminarModal">
+                         <center>
+                            <p:panel id="pnlDeleteModal" header="ELIMINAR ITEM">
+                                <p:separator style="border-color: orange"></p:separator>
+                                <h:panelGrid columns="2">
+                                     <center>
+                                        <p:outputLabel value="Esta seguro de eliminar este item?"> </p:outputLabel>
+                                        <p:commandButton id="cbEliminar"  value="ELIMINAR" icon ="fa fa-university" action="#{itemscore.eliminarModalPanel()}" oncomplete="PF('eliminarModal').hide();" update=":formularioitem" ></p:commandButton>
+                                    </center>
+                                </h:panelGrid>
+                            </p:panel>   
+                        </center>
+                    </h:form>
+                </p:dialog>
+                
+                
+                
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

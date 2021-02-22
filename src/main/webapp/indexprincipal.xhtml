@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <f:facet name="first">
+                <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+                <title>CONTROL DE ACTIVOS T.I.</title>
+            </f:facet>
+        </h:head>
+        <style>
+            body{
+                font-size: 10px;
+            }
+        </style>
+        <h:body>
+
+            <p:layout fullPage="true">
+
+ <center>
+                <p:layoutUnit position="north" size="90" resizable="false" closable="false" collapsible="false">
+                    <h:graphicImage name="/images/cabecera1.png" width="1100" height="80"  alt="principal" />
+                </p:layoutUnit>                                    
+</center> 
+                <p:layoutUnit position="west" size="160" header="CONTROL DE ACTIVOS" collapsible="false">
+                    <marquee style="width:130px; font-style: initial; color: orange " direction="lefth" >BIENVENID@
+                    #{usercore.usuarioSesion.userName}
+                    </marquee>
+                    
+                    <center>
+                    <h:outputLabel style="text-transform: uppercase;" value="USUARIO: #{usercore.usuarioSesion.userName}"></h:outputLabel><br/>
+                    <p:commandLink action="#{usercore.logout()}">
+                        <h:graphicImage name="/images/salir.png" width="30" height="30"  alt="principal" />
+                    </p:commandLink><br/>
+                    </center>
+                     
+                    <h:form>  
+                        <!-- <p:menubar> -->
+                        <p:menu toggleable="true" style="border: 0px;" >
+                            <p:submenu label="¿Quiénes Somos?" icon="pi pi-file">                               
+                                <p:menuitem value="Misión y Visión"  icon="fa fa-bank" onclick="PF('misionvis').show()" />                                                           
+
+                                <p:menuitem value="Contáctanos" icon="fa fa-phone" onclick="PF('contactanos').show()" />
+                            </p:submenu>                             
+                        </p:menu>
+                        <!--</p:menubar>-->
+                    </h:form>
+                    <p:separator />
+                    <p:separator />
+                    <p:menu toggleable="true" style="border: 0px;">
+                        
+                        <p:submenu label="AREAS" rendered="#{!usercore.preguntaEditor}">
+                            <p:menuitem value="Departamentos" icon ="fa fa-university" outcome="/xhtml/departamentos" />             
+                        </p:submenu>
+                        <p:separator rendered="#{!usercore.preguntaEditor}" />
+                        <p:separator rendered="#{!usercore.preguntaEditor}" />
+                        
+
+                        <p:submenu label="RESPONSABLES" rendered="#{!usercore.preguntaEditor}">
+                            <p:menuitem value="Usuarios" icon ="fa fa-user-plus" outcome="/xhtml/usuarios" />                
+                        </p:submenu>
+                        <p:separator rendered="#{!usercore.preguntaEditor}" />
+                        <p:separator rendered="#{!usercore.preguntaEditor}" />
+
+                        
+
+                        <p:submenu label="ACTIVOS" rendered="#{!usercore.preguntaEditor}">
+                            <p:menuitem value="Items" icon ="fa fa-laptop" outcome="/xhtml/items" />     
+                            <p:menuitem value="Partes" icon ="fa fa-microchip" outcome="/xhtml/partes" />               
+                        </p:submenu>
+
+                        <p:separator rendered="#{!usercore.preguntaEditor}"/>
+                        <p:separator rendered="#{!usercore.preguntaEditor}"/>
+
+                        
+                        <p:submenu label="TAREAS" rendered="#{!usercore.preguntaEditor}">
+                          <p:menuitem value="Mantenimientos" icon ="fa fa-wrench" outcome="/xhtml/mantenimientos" />         
+                        </p:submenu>
+                        <p:separator rendered="#{!usercore.preguntaEditor}"/>
+                        <p:separator rendered="#{!usercore.preguntaEditor}"/>
+                        
+                        <p:submenu label="BUSQUEDAS">
+                            <p:menuitem value="Usuarios" icon ="fa fa-male" outcome="/xhtml/lista/listarusuarios" />  
+                            <p:menuitem value="Items" icon ="fa fa-laptop" outcome="/xhtml/lista/listaritems" /> 
+                            <p:menuitem value="Mantenimiento" icon ="fa fa-wrench" outcome="/xhtml/lista/listarmantenimientos" /> 
+                            <p:menuitem value="Partes" icon ="fa fa-microchip" outcome="/xhtml/lista/listarpartes" /> 
+                            <p:menuitem value="Departamentos" icon ="fa fa-university" outcome="/xhtml/lista/listardepartamentos" /> 
+                        </p:submenu>
+                        <p:separator />
+                        <p:separator />
+                        
+                        
+                        <p:submenu label="REPORTE">
+                            <p:menuitem value="Consulta" icon ="fa fa-search-plus" outcome="/xhtml/consultas" />  
+
+                        </p:submenu>
+                        <p:separator />
+                        <p:separator />
+
+
+                    </p:menu>
+                   
+                    <h:form >
+                        <div>
+                            <p:dialog header="Contáctanos" widgetVar="contactanos"  resizable="false" draggable="false" position="center" width="600" height="400" appendTo="@(body)" style="background-color: darkturquoise" >
+
+
+                                <ui:include src="Extras/contacto.xhtml" />
+
+                                <a href="#"><img src="images/volver.png" width="137" height="51" align="right" alt="Cerrar" onclick="PF('contactanos').hide()"/></a>
+
+                            </p:dialog>
+
+                        </div>
+                    </h:form>
+                    <!--***********************************************************************************************-->
+                    <!--***********************************************************************************************-->   
+                    <h:form >
+                        <div>
+                            <p:dialog header="Mision y Vision" widgetVar="misionvis"  resizable="false" draggable="false" position="center" width="600" height="400" appendTo="@(body)" style="background-color: darkturquoise" >
+
+
+                                <ui:include src="Extras/misionvision.xhtml" />
+
+                                <a href="#"><img src="images/volver.png" width="137" height="51" align="right" alt="Cerrar" onclick="PF('misionvis').hide()"/></a>
+
+                            </p:dialog>
+
+                        </div>
+                    </h:form>
+
+
+                </p:layoutUnit>   
+                <p:layoutUnit position="center">
+                    <ui:insert name="content"/>
+                </p:layoutUnit>
+            </p:layout>
+        </h:body>
+    </f:view>
+</html>
+

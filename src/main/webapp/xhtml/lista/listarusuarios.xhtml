@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <h:head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </h:head>
+    <h:body>
+        <ui:composition template="/indexprincipal.xhtml">     
+            <ui:define name="windowTitle">
+                #{msgs.planetariumTitle}
+            </ui:define> 
+            <ui:define name="content">
+
+                <h:graphicImage name="/images/franja.PNG" width="1200" height="80"  alt="listausuarios" />
+
+                <h:form id="listausuarios">
+
+
+                    <center>
+
+                        <p:panel header="LISTA DE USUARIOS REGISTRADOS"/>
+                    </center>     
+
+
+                    <p:dataTable id="listarUsuarios" value="#{usuarioscore.listaUser}"
+
+                                 var="listarUsuarios" widgetVar="listarUsuarios"
+                                 rows="5"
+                                 paginator="true"
+                                 paginatorPosition="bottom"
+                                 scrollable="true"
+                                 scrollRows="5"
+                                 scrollHeight="150">
+                        <f:facet name="header">
+                            <h:commandLink>
+                                <h:graphicImage url="/resources/images/pdf.png" width="24"/>
+                                <p:dataExporter type="pdf" target="listarUsuarios" fileName="ReporteUsuarios"/>
+                            </h:commandLink>  
+                        </f:facet>
+
+                        <f:facet name="header">
+                            <h:commandLink>
+                                <h:graphicImage url="/resources/images/exel.png" width="24"/>
+                                <p:dataExporter type="xls" target="listarUsuarios" fileName="ReporteUsuarios"/>
+                            </h:commandLink>  
+                        </f:facet>
+
+                        <p:column id="coId" headerText="Id"  filterBy="#{listarUsuarios.idUsuario}">
+                            <p:outputLabel value="#{listarUsuarios.idUsuario} "> </p:outputLabel>
+                        </p:column>
+
+                        <p:column id="coCedula" headerText="Cédula" filterBy="#{listarUsuarios.cedulausuario}">
+                            <p:outputLabel value="#{listarUsuarios.cedulausuario}"> </p:outputLabel>
+                        </p:column>
+
+                        <p:column id="coNombres" headerText="Nombre" filterBy="#{listarUsuarios.nombreusuario}">
+                            <p:outputLabel value="#{listarUsuarios.nombreusuario}"> </p:outputLabel>
+                        </p:column>
+
+                        <p:column id="coApellidos" headerText="Apellido" filterBy="#{listarUsuarios.apellidousuario}">
+                            <p:outputLabel value="#{listarUsuarios.apellidousuario}"> </p:outputLabel>
+                        </p:column>
+
+                        <p:column id="coDireccion" headerText="Dirección" filterBy="#{listarUsuarios.direccionusuario}">
+                            <p:outputLabel value="#{listarUsuarios.direccionusuario}"> </p:outputLabel>
+                        </p:column>
+
+                        <p:column id="coTelefono" headerText="Teléfono" filterBy="#{listarUsuarios.telefonousuario}">
+                            <p:outputLabel value="#{listarUsuarios.telefonousuario}"> </p:outputLabel>
+                        </p:column>
+
+                        <p:column id="coCorreo" headerText="Correo" filterBy="#{listarUsuarios.correousuario}">
+                            <p:outputLabel value="#{listarUsuarios.correousuario}"> </p:outputLabel>
+                        </p:column>
+
+                        <p:column headerText="Departamento" filterBy="#{listarUsuarios.fkDepartamento.nombredpto}">
+                            <p:outputLabel value="#{listarUsuarios.fkDepartamento.nombredpto}" > </p:outputLabel>
+                        </p:column>
+
+                        <p:column id="coEditDpto" headerText="Editar" width="30"  rendered="#{usercore.preguntaAdministrador or usercore.preguntaNormal}">
+                            <p:commandButton icon="ui-icon-pencil" title="Editar usuario" update=":frmUsuarioEdit" actionListener="#{usuarioscore.editarUsuario(listarUsuarios)}" oncomplete="PF('editarUsuar').show();">
+                                <f:setPropertyActionListener target="#{usuarioscore.editarUsr}" value="#{listarUsuarios}"></f:setPropertyActionListener>
+                            </p:commandButton>
+                        </p:column>
+
+                        <p:column id="coElimDpto" headerText="Eliminar" width="35" rendered="#{usercore.preguntaAdministrador}">
+                            <p:commandButton icon="ui-icon-trash" title="Eliminar usuario" update=":frmEliminarUsuario" actionListener="#{usuarioscore.editarUsuario(listarUsuarios)}" oncomplete="PF('eliminaUsuar').show();">
+                                <f:setPropertyActionListener target="#{usuarioscore.editarUsr}" value="#{listarUsuarios}"></f:setPropertyActionListener>
+                            </p:commandButton>
+                        </p:column>
+
+                    </p:dataTable>
+
+                </h:form>
+
+                <!-- DIALOG PARA EDITAR -->    
+                <p:dialog header="Editar" id="editarUsuar" widgetVar="editarUsuar"  resizable="false" draggable="false" position="center" width="600" height="300" appendTo="@(body)" style="background-color: darkturquoise" >
+                    <h:form id="frmUsuarioEdit">
+                        <center>
+                            <p:panel id="pnlEditDepa" header="EDITAR EL USUARIO">
+                                <p:separator style="border-color: orange"></p:separator>
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel id="olCedula" value="Cedula"> </p:outputLabel>
+                                    <p:inputText id="Cedula" required="true" size="20" value="#{usuarioscore.editarUsr.cedulausuario}"></p:inputText>
+
+                                    <p:outputLabel id="olNombre" value="Nombre"> </p:outputLabel>
+                                    <p:inputText id="Nombres" required="true" size="20" value="#{usuarioscore.editarUsr.nombreusuario}"></p:inputText>
+
+                                    <p:outputLabel id="olApellido" value="Apellido"> </p:outputLabel>
+                                    <p:inputText id="Apellidos" required="true" size="20" value="#{usuarioscore.editarUsr.apellidousuario}"></p:inputText>
+
+                                    <p:outputLabel id="olDireccion" value="Direccion"> </p:outputLabel>
+                                    <p:inputText id="Direccion" required="true" size="20" value="#{usuarioscore.editarUsr.direccionusuario}"></p:inputText>
+
+                                    <p:outputLabel id="olTelefono" value="Telefono"> </p:outputLabel>
+                                    <p:inputText id="Telefono" required="true" size="20" value="#{usuarioscore.editarUsr.telefonousuario}"></p:inputText>
+
+                                    <p:outputLabel id="olCorreo" value="Correo"> </p:outputLabel>
+                                    <p:inputText id="Correo" required="true" size="20" value="#{usuarioscore.editarUsr.correousuario}"></p:inputText>
+
+                                    <p:outputLabel id="oldepartamento" value="Departamento"> </p:outputLabel>
+                                    <p:selectOneMenu id="console" value="#{usuarioscore.idDepartamento}" 
+                                                     panelStyle="width:250px">
+                                        <f:selectItem itemLabel="Seleccionar" itemValue="" />
+                                        <f:selectItems value="#{usuarioscore.listarDepart}" var="dept"
+                                                       itemLabel="#{dept.nombredpto}" 
+                                                       itemValue="#{dept.idDepartamento}"> </f:selectItems>
+                                    </p:selectOneMenu>                                                       
+
+                                    <center>
+                                        <p:commandButton id="cbRegistrar" icon ="fa fa-user-plus" action="#{usuarioscore.actualizarModalPanel()}" update=":listausuarios" value="REGISTRAR"  style="margin-right:80px;"></p:commandButton>
+                                    </center>
+                                </h:panelGrid>
+                            </p:panel>   
+                        </center>
+                    </h:form>
+                </p:dialog>
+
+                <!-- DIALOG PARA ELIMINAR -->    
+                <p:dialog header="Eliminar" id="eliminaUsuar" widgetVar="eliminaUsuar"  resizable="false" draggable="false" position="center" width="400" height="100" appendTo="@(body)" style="background-color: darkturquoise" >
+                    <h:form id="frmEliminarUsuario">
+                        <center>
+                            <p:panel id="pnlEditDepa" header="ELIMINAR USUARIO">
+                                <p:separator style="border-color: orange"></p:separator>
+                                <h:panelGrid columns="2">
+                                    <center>
+                                        <p:outputLabel value="Esta seguro de eliminar este registro"> </p:outputLabel>
+                                        <p:commandButton id="cbEliminar"  value="ELIMINAR" icon ="fa fa-university" action="#{usuarioscore.eliminaUsuario}" oncomplete="PF('eliminaUsuar').hide();" update=":listausuarios" ></p:commandButton>
+                                    </center>
+                                </h:panelGrid>
+                            </p:panel>   
+                        </center>
+                    </h:form>
+                </p:dialog>
+
+            </ui:define>
+        </ui:composition>
+
+    </h:body>
+</html>
